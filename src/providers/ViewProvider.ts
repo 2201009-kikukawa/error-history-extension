@@ -12,7 +12,10 @@ import { getNonce } from "../utilities/getNonce";
 export class ViewProvider implements WebviewViewProvider {
   public static readonly viewType = "sample-id";
 
-  constructor(private readonly _extensionUri: Uri) {}
+  constructor(
+    private readonly _extensionUri: Uri,
+    private readonly onViewResolve?: (view: WebviewView) => void
+  ) {}
 
   public resolveWebviewView(
     webviewView: WebviewView,
@@ -25,6 +28,10 @@ export class ViewProvider implements WebviewViewProvider {
     };
 
     webviewView.webview.html = this._getWebviewContent(webviewView.webview, this._extensionUri);
+
+    if (this.onViewResolve) {
+      this.onViewResolve(webviewView); // WebviewView を呼び出し元に渡す
+    }
   }
 
   private _getWebviewContent(webview: Webview, extensionUri: Uri) {
@@ -34,13 +41,13 @@ export class ViewProvider implements WebviewViewProvider {
 
     return /*html*/ `
       <!DOCTYPE html>
-      <html lang="en">
+      <html lang="ja">
         <head>
           <meta charset="UTF-8" />
           <meta name="viewport" content="width=device-width, initial-scale=1.0" />
           <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${webview.cspSource}; script-src 'nonce-${nonce}';">
           <link rel="stylesheet" href="${stylesUri}" />
-          <title>Sample</title>
+          <title>エラービュー</title>
         </head>
         <body>
           <div id="root"></div>

@@ -16,6 +16,13 @@
     "*"
   ],
   "contributes": {
+    "commands": [
+      {
+        "command": "extension.errorCheck",
+        "title": "エラーチェック（出力に表示）",
+        "category": "Error"
+      }
+    ],
     "views": {
       "sample-id": [
         {
